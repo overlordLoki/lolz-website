@@ -1,46 +1,51 @@
 import { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { Box, createTheme, CssBaseline, Paper, TextField, ThemeProvider, Typography } from "@mui/material";
+import TeamViewer from "./TeamViewer";
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: "#f44336",
+      contrastText: "#fff"
+    },
+    secondary: {
+      main: "#2196f3",
+      contrastText: "#fff"
+    }
+  }
+});
+
+
 
 function App() {
-  const [count, setCount] = useState("Loading...");
-
-  useEffect(() => {
-    fetch("/api/v1/counter")
-      .then((res) => res.text())
-      .then((count) => setCount(count));
-  }, []);
+  const [teamText, setTeamText] = useState("");
+  const [team, setTeam] = useState("");
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>count is: {count || "loading..."}</p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box className="App" m={2} p={2}>
+        <Typography variant="h3">
+          LoL Bets
+        </Typography>
+        <TextField
+          label="Team"
+          value={teamText}
+          onChange={(e) => setTeamText(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              setTeam(teamText);
+            }
+          }
+          }
+          style={{ marginBlock: 20 }}
+        />
+        {team && <TeamViewer team={team} />}
+      </Box>
+    </ThemeProvider>
   );
 }
 
